@@ -15,60 +15,12 @@ import GoogleMobileAds
     @objc optional func adViewActionDidFinish(advert: AdBannerView)
 }
 
-/*
- // Dummy view
- public class AdBannerView: UIView {
-
- public static let shared = AdBannerView() //Singleton Class
- public var adEnabled: Bool = false
- public var adLoaded: Bool = false
- public var isPresenting = false //Status whether the ad is being viewed
- public weak var delegate: AdBannerViewDelegate?
- public weak var viewController: UIViewController?  //View controller to present ads onto
-
- public static func configure(withApplicationID id: String ) {
- print("Dummy AdBannerView")
- }
-
- public var height: CGFloat {
- if UIDevice.current.userInterfaceIdiom == .pad {
- return 90
- } else {
- return UIDevice.current.orientation.isLandscape ? 32 : 50
- }
- }
-
- public override init(frame: CGRect) {
- super.init(frame: frame)
- }
-
- required init?(coder aDecoder: NSCoder) {
- super.init(coder: aDecoder)
- }
-
- deinit {
- }
-
- ////////////////////////////////////////////////////////////////////////////////////
- // Advert start/stop deamons
- ////////////////////////////////////////////////////////////////////////////////////
-
- public func requestAd() {
- //  delegate?.adView?(advert: self, didFailToReceiveAdWithError: NSError(domain: "Dummy AdViewBanner", code: 0, userInfo: nil))
- }
-
- public func stop() {
- }
- }
- */
-
-
 public class AdBannerView: UIView, GADBannerViewDelegate {
     public static let shared = AdBannerView() //Singleton Class
 
     public var adEnabled: Bool = false
     public var adLoaded: Bool = false
-    public var isPresenting = false //Status whether the ad is being viewed
+    public var isPresenting = false
 
     public static func configure(withApplicationID id: String ) {
         GADMobileAds.configure(withApplicationID: id)
@@ -77,7 +29,7 @@ public class AdBannerView: UIView, GADBannerViewDelegate {
 
     //Delegates
     public weak var delegate: AdBannerViewDelegate?
-    public weak var viewController: UIViewController? { //View controller to present ads onto
+    public weak var viewController: UIViewController? {
         didSet{
             //View controller changed while admob is presented
             if viewController != nil && oldValue != viewController {
@@ -86,10 +38,7 @@ public class AdBannerView: UIView, GADBannerViewDelegate {
         }
     }
 
-    // Constants (and computed variables)
-    fileprivate var adUnitID: String {
-        return UIDevice.current.isSimulator ? "ca-app-pub-3940256099942544/2934735716" : "ca-app-pub-7278208006986307/9712866674"
-    }
+    fileprivate var adUnitID: String = "ca-app-pub-3940256099942544/2934735716"
 
     public var height: CGFloat {
         if UIDevice.current.userInterfaceIdiom == .pad {
@@ -187,7 +136,6 @@ public class AdBannerView: UIView, GADBannerViewDelegate {
         layoutSubviews()
     }
 
-    //Resize all frames to suite orientation and screen dimentions
     override public func layoutSubviews() {
         super.layoutSubviews()
 
@@ -200,7 +148,6 @@ public class AdBannerView: UIView, GADBannerViewDelegate {
         } else {
             adMob.adSize = kGADAdSizeSmartBannerPortrait
         }
-
 
         //Set constraints
         adMob.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true

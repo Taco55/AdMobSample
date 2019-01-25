@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
-        AdBannerView.configure(withApplicationID: "ca-app-pub-7278208006986307~3745559478")
+        AdBannerView.configure(withApplicationID: "ca-app-pub-3940256099942544~1458002511")
 
         let viewController = TestTargetViewController()
         window?.rootViewController = viewController
