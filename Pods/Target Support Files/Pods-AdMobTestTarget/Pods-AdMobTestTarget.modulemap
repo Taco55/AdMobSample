@@ -1,0 +1,6 @@
+framework module Pods_AdMobTestTarget {
+  umbrella header "Pods-AdMobTestTarget-umbrella.h"
+
+  export *
+  module * { export * }
+}
