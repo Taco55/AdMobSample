@@ -1,10 +1,9 @@
 //
-//  BannerView.swift
-//  Meal2day
+//  AdBannerView.swift
 //
 //  Created by Taco Kind on 28-09-18.
 //  Copyright © 2018 Taco Kind. All rights reserved.
-//
+
 import GoogleMobileAds
 
 @objc public protocol AdBannerViewDelegate{
@@ -27,11 +26,9 @@ public class AdBannerView: UIView, GADBannerViewDelegate {
         shared.adEnabled = true
     }
 
-    //Delegates
     public weak var delegate: AdBannerViewDelegate?
     public weak var viewController: UIViewController? {
         didSet{
-            //View controller changed while admob is presented
             if viewController != nil && oldValue != viewController {
                 adMob.rootViewController = viewController
             }
@@ -52,7 +49,6 @@ public class AdBannerView: UIView, GADBannerViewDelegate {
     public var adMob: GADBannerView!
 
     lazy fileprivate var request: GADRequest = {
-        //Load request for production or testing
         let request = GADRequest()
         if UIDevice.current.isSimulator {
             request.testDevices = [ kGADSimulatorID ]
@@ -103,11 +99,10 @@ public class AdBannerView: UIView, GADBannerViewDelegate {
 
     //AdMob Delegate
     public func adViewDidReceiveAd(_ bannerView: GADBannerView) {
-
         print("Did receive new ad")
+
         adLoaded = true
 
-        //Show ad when loaded
         if adMob.superview == nil {
             addSubview(adMob)
         }
@@ -125,7 +120,6 @@ public class AdBannerView: UIView, GADBannerViewDelegate {
     public func adViewWillPresentScreen(_ bannerView: GADBannerView) {
         isPresenting = true
 
-        //Delegate
         delegate?.adViewActionShouldBegin?(advert: self)
     }
 
@@ -139,15 +133,10 @@ public class AdBannerView: UIView, GADBannerViewDelegate {
     override public func layoutSubviews() {
         super.layoutSubviews()
 
-        //Stop frame from ajusting when presenting an advert which isn't current orientation
-        if isPresenting { return }
+        guard !isPresenting else { return }
 
         //Set orientation
-        if UIDevice.current.orientation.isLandscape {
-            adMob.adSize = kGADAdSizeSmartBannerLandscape
-        } else {
-            adMob.adSize = kGADAdSizeSmartBannerPortrait
-        }
+        adMob.adSize = UIDevice.current.orientation.isLandscape ? kGADAdSizeSmartBannerLandscape : kGADAdSizeSmartBannerPortrait
 
         //Set constraints
         adMob.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
@@ -157,14 +146,8 @@ public class AdBannerView: UIView, GADBannerViewDelegate {
 
     //Run callback for default advert if clicked
     override public func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        var visible = true
-
         //Check AdMob
-        if adMob.window != nil {
-            visible = false
-        }
-
-        if visible{
+        if adMob.window == nil {
             delegate?.adViewDefaultAction?(advert: self)
         }
     }
