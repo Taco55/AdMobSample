@@ -19,7 +19,7 @@ end
 post_install do |installer|
   embedded_frameworks = ['GoogleMobileAds']
     embedded_frameworks.each do |embedded_framework|
-      # auto_process_target(['InventoryKit', 'InventoryKitTests'], embedded_framework, installer)
+      # auto_process_target(['AdMobSample'], embedded_framework, installer)
     end
 
 end
